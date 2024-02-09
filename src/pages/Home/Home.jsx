@@ -2,6 +2,7 @@ import Card from "../../components/Card/Card";
 import classes from "./Home.module.scss";
 import cardsDataJson from "./../../cardsData.json";
 
+// should be like <ul><li><Card></Card></li></ul>
 function Home() {
   return (
     <section className={classes.home}>
