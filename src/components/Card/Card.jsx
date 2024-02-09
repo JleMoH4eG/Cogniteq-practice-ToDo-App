@@ -1,5 +1,6 @@
 import classes from "./Card.module.scss";
 
+//should be div
 function Card({ taskName, taskContent, taskDate }) {
   return (
     <li className={classes.card}>
