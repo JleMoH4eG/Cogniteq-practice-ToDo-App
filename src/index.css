@@ -1,11 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100;0,400;0,600;1,100;1,400&display=swap");
 body {
-  background-image: url(https://trello-backgrounds.s3.amazonaws.com/SharedBackground/2286x1600/24baa6609b89fb8eb0cc0aceb70eaf36/photo-1557682250-33bd709cbe85.jpg);
-  background-size: cover;
-  background-position-x: 50%;
-  background-position-y: 50%;
-  background-repeat: no-repeat;
-  font-family: "Noto Sans";
+  background: url(https://trello-backgrounds.s3.amazonaws.com/SharedBackground/2286x1600/24baa6609b89fb8eb0cc0aceb70eaf36/photo-1557682250-33bd709cbe85.jpg)
+    0 0/100% no-repeat;
 }
 
 /* Обнуляющий стиль */

@@ -1,13 +1,13 @@
 .card {
   display: flex;
   flex-direction: column;
-  flex: 0 0 272px;
   max-height: 405px;
   padding: 8px;
   font-size: 14px;
   background-color: rgb(241, 242, 244);
   border-radius: 12px;
   color: rgb(23, 43, 77);
+  width: 100%;
   cursor: pointer;
   transition: 0.19s;
   &:hover {

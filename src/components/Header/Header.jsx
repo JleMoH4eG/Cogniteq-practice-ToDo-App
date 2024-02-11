@@ -1,5 +1,5 @@
 import classes from "./Header.module.scss";
-import userIcon from "./../../img/userIcon.svg";
+import userIcon from "./../../assets/userIcon.svg";
 
 function Header() {
   return (
@@ -21,7 +21,7 @@ function Header() {
               fillRule="evenodd"
             ></path>
           </svg>
-          <input type="text" placeholder="Поиск" className={classes.search} />
+          <input type="text" placeholder="Search" className={classes.search} />
         </div>
         <div className={classes.userIconContainer}>
           <img src={userIcon} alt="User Icon" className={classes.userIconImg} />
