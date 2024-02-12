@@ -7,8 +7,10 @@ import { useState, useId } from "react";
 function Home() {
   // New task's title value control
   const [taskTitleValue, setTaskTitleValue] = useState("");
+  // remove it
   const [taskTitleEmpty, setTaskTitleEmpty] = useState(true);
   const [taskTitleEdited, setTaskTitleEdited] = useState(false);
+  // handleInputTitle
   const getTaskTitleValue = (event) => {
     setTaskTitleValue(event.target.value);
     setTaskTitleEmpty(event.target.value.trim().length === 0);
@@ -17,8 +19,10 @@ function Home() {
 
   // New task's description value control
   const [taskDescriptionValue, setTaskDescriptionValue] = useState("");
+  // remove it
   const [taskDescriptionEmpty, setTaskDescriptionEmpty] = useState(true);
   const [taskDescriptionEdited, setTaskDescriptionEdited] = useState(false);
+  // better name it like handleInputDescription
   const getTaskDescriptionValue = (event) => {
     setTaskDescriptionValue(event.target.value);
     setTaskDescriptionEmpty(event.target.value.trim().length === 0);
@@ -34,6 +38,7 @@ function Home() {
   };
 
   // Form submit functional
+  // TODO: better create in fn, where're going to use it
   const newTaskObject = {
     title: taskTitleValue,
     description: taskDescriptionValue,
@@ -44,12 +49,20 @@ function Home() {
 
   const saveFormData = (event) => {
     event.preventDefault();
+    const newTaskObject = {
+      title: taskTitleValue,
+      description: taskDescriptionValue,
+      date: createDate(),
+      comleted: false,
+      id: useId() + createDate(),
+    };
     setTaskTitleValue("");
     setTaskDescriptionValue("");
     setTaskTitleEmpty(true);
     setTaskDescriptionEmpty(true);
     setTaskTitleEdited(false);
     setTaskDescriptionEdited(false);
+    // remove it from here, need to get data in useEffect hook, and set state like const [cardsData, setCardsData] = useState([])
     if (localStorage.getItem("cardsData")) {
       const data = JSON.parse(localStorage.getItem("cardsData"));
       data.push(newTaskObject);
