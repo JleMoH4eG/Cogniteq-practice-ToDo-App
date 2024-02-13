@@ -5,6 +5,10 @@ import Button from "../../components/Button/Button";
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
+// need to remove title, description, completed from route params
+// useEffect get Data by id, search by id current todo, set this values to state
+// if (!cardItem) redirect to home page
+
 function EditCard() {
   // Get card data
   const { id, title, description, completed } = useParams();
@@ -98,7 +102,7 @@ function EditCard() {
           }
           value={taskDescriptionValue}
           onChange={handleInputDescription}
-        ></textarea>
+        />
 
         <div className={classes.editCardChecboxContainer}>
           <input
@@ -129,7 +133,7 @@ function EditCard() {
 
       <div className={classes.editCardReturnButtonContainer}>
         <Link to={"/"}>
-          <span className={classes.editCardReturnButton}></span>
+          <span className={classes.editCardReturnButton}/>
         </Link>
       </div>
     </section>
