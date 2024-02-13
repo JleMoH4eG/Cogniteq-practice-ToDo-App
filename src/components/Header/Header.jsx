@@ -1,6 +1,8 @@
 import classes from "./Header.module.scss";
 import userIcon from "./../../assets/userIcon.svg";
 
+// for svg create component in components folder icons
+
 function Header() {
   return (
     <header className={classes.header}>
