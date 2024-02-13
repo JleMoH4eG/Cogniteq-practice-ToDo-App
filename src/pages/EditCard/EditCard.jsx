@@ -5,35 +5,38 @@ import Button from "../../components/Button/Button";
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
-// need to remove title, description, completed from route params
-// useEffect get Data by id, search by id current todo, set this values to state
-// if (!cardItem) redirect to home page
-
 function EditCard() {
+  const navigateTo = useNavigate();
+
   // Get card data
-  const { id, title, description, completed } = useParams();
+  const { id } = useParams();
   const [cardsData, setCardsData] = useState([]);
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem("cardsData")) || [];
     setCardsData(data);
-  }, []);
+    const currentData = data.find((item) => item.id === id);
+    if (!currentData) navigateTo("/");
+    else {
+      setTaskTitleValue(currentData.title);
+      setTaskDescriptionValue(currentData.description);
+      setTaskCompletedValue(currentData.completed);
+    }
+  }, [id, navigateTo]);
 
   // Task's title value control
-  const [taskTitleValue, setTaskTitleValue] = useState(title);
+  const [taskTitleValue, setTaskTitleValue] = useState("");
   const handleInputTitle = (event) => {
     setTaskTitleValue(event.target.value);
   };
 
   // Task's description value control
-  const [taskDescriptionValue, setTaskDescriptionValue] = useState(description);
+  const [taskDescriptionValue, setTaskDescriptionValue] = useState("");
   const handleInputDescription = (event) => {
     setTaskDescriptionValue(event.target.value);
   };
 
   // Task's comleted value control
-  const [taskCompletedValue, setTaskCompletedValue] = useState(
-    completed === "true"
-  );
+  const [taskCompletedValue, setTaskCompletedValue] = useState(false);
   const handleCheckbox = () => {
     setTaskCompletedValue(!taskCompletedValue);
   };
@@ -47,7 +50,6 @@ function EditCard() {
   };
 
   // Edit card data in local storage
-  const navigateTo = useNavigate();
   const editCardData = (event) => {
     event.preventDefault();
     try {
@@ -133,7 +135,7 @@ function EditCard() {
 
       <div className={classes.editCardReturnButtonContainer}>
         <Link to={"/"}>
-          <span className={classes.editCardReturnButton}/>
+          <span className={classes.editCardReturnButton} />
         </Link>
       </div>
     </section>

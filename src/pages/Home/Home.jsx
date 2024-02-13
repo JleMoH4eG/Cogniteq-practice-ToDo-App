@@ -110,9 +110,7 @@ function Home() {
       <ul className={classes.cardsContainer}>
         {cardsData.map((card) => (
           <li key={card.id} className={classes.cardLi}>
-            <Link
-              to={`/edit/${card.id}/${card.title}/${card.description}/${card.completed}`}
-            >
+            <Link to={`/edit/${card.id}`}>
               <Card
                 taskName={card.title}
                 taskDescription={card.description}
