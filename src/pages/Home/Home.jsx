@@ -117,6 +117,7 @@ function Home() {
                 taskName={card.title}
                 taskDescription={card.description}
                 taskDate={card.date}
+                isCompleted={card.completed}
               />
             </Link>
           </li>
