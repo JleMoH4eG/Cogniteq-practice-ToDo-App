@@ -1,20 +1,16 @@
 import classes from "./Input.module.scss";
 
-function Input({ inputId, value, getTaskTitleValue, style, ...props }) {
-  // need to change getTaskTitleValue to onChange
-  // const classNames = [classes.input]
-  // if (props.className) classNames.push(props.className) 
-  // in <input className={classNames.join(' ')}
+function Input({ inputId, value, onChange, ...props }) {
+  const classNames = [classes.input];
+  if (props.className) classNames.push(props.className);
+
   return (
     <input
-      onChange={getTaskTitleValue}
+      onChange={onChange}
       value={value}
       id={inputId}
       type="text"
-      className={classes.input}
-      style={{
-        outline: style,
-      }}
+      className={classNames.join(" ")}
     />
   );
 }

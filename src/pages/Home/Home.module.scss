@@ -37,6 +37,9 @@
   &:focus {
     outline: 2px solid rgb(23, 43, 77);
   }
+  &.empty {
+    outline: 2px solid #db2121;
+  }
 }
 .toDoFormLabel {
   color: #fff;

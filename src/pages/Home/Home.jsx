@@ -1,32 +1,23 @@
 import Card from "../../components/Card/Card";
 import Input from "../../components/Input/Input";
-import SubmitBtn from "../../components/SubmitBtn/SubmitBtn";
+import Button from "../../components/Button/Button";
 import classes from "./Home.module.scss";
-import { useState, useId } from "react";
+import inputClasses from "./../../components/Input/Input.module.scss";
+import uuid from "react-uuid";
+import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 function Home() {
   // New task's title value control
   const [taskTitleValue, setTaskTitleValue] = useState("");
-  // remove it
-  const [taskTitleEmpty, setTaskTitleEmpty] = useState(true);
-  const [taskTitleEdited, setTaskTitleEdited] = useState(false);
-  // handleInputTitle
-  const getTaskTitleValue = (event) => {
+  const handleInputTitle = (event) => {
     setTaskTitleValue(event.target.value);
-    setTaskTitleEmpty(event.target.value.trim().length === 0);
-    setTaskTitleEdited(true);
   };
 
   // New task's description value control
   const [taskDescriptionValue, setTaskDescriptionValue] = useState("");
-  // remove it
-  const [taskDescriptionEmpty, setTaskDescriptionEmpty] = useState(true);
-  const [taskDescriptionEdited, setTaskDescriptionEdited] = useState(false);
-  // better name it like handleInputDescription
-  const getTaskDescriptionValue = (event) => {
+  const handleInputDescription = (event) => {
     setTaskDescriptionValue(event.target.value);
-    setTaskDescriptionEmpty(event.target.value.trim().length === 0);
-    setTaskDescriptionEdited(true);
   };
 
   // Create a beautiful date
@@ -38,14 +29,11 @@ function Home() {
   };
 
   // Form submit functional
-  // TODO: better create in fn, where're going to use it
-  const newTaskObject = {
-    title: taskTitleValue,
-    description: taskDescriptionValue,
-    date: createDate(),
-    comleted: false,
-    id: useId() + createDate(),
-  };
+  const [cardsData, setCardsData] = useState([]);
+  useEffect(() => {
+    const data = JSON.parse(localStorage.getItem("cardsData")) || [];
+    setCardsData(data);
+  }, []);
 
   const saveFormData = (event) => {
     event.preventDefault();
@@ -53,24 +41,17 @@ function Home() {
       title: taskTitleValue,
       description: taskDescriptionValue,
       date: createDate(),
-      comleted: false,
-      id: useId() + createDate(),
+      completed: false,
+      id: uuid(),
     };
-    setTaskTitleValue("");
-    setTaskDescriptionValue("");
-    setTaskTitleEmpty(true);
-    setTaskDescriptionEmpty(true);
-    setTaskTitleEdited(false);
-    setTaskDescriptionEdited(false);
-    // remove it from here, need to get data in useEffect hook, and set state like const [cardsData, setCardsData] = useState([])
-    if (localStorage.getItem("cardsData")) {
-      const data = JSON.parse(localStorage.getItem("cardsData"));
-      data.push(newTaskObject);
-      localStorage.setItem("cardsData", JSON.stringify(data));
-    } else {
-      const data = [];
-      data.push(newTaskObject);
-      localStorage.setItem("cardsData", JSON.stringify(data));
+    try {
+      let newData = cardsData;
+      newData.push(newTaskObject);
+      setCardsData(newData);
+      localStorage.setItem("cardsData", JSON.stringify(cardsData));
+    } finally {
+      setTaskTitleValue("");
+      setTaskDescriptionValue("");
     }
   };
 
@@ -89,10 +70,12 @@ function Home() {
           New task's title:
         </label>
         <Input
-          getTaskTitleValue={getTaskTitleValue}
+          onChange={handleInputTitle}
           inputId={"toDoFormTaskTitle"}
           value={taskTitleValue}
-          style={taskTitleEmpty && taskTitleEdited ? "2px solid #db2121" : ""}
+          className={
+            taskTitleValue.trim().length === 0 ? inputClasses.empty : ""
+          }
         />
 
         <label
@@ -104,32 +87,40 @@ function Home() {
         <textarea
           id="toDoFormTaskDescriptionField"
           name="toDoFormTaskDescriptionField"
-          className={classes.toDoFormTaskDescriptionField}
+          className={
+            taskDescriptionValue.trim().length === 0
+              ? classes.toDoFormTaskDescriptionField + " " + classes.empty
+              : classes.toDoFormTaskDescriptionField
+          }
           value={taskDescriptionValue}
-          onChange={getTaskDescriptionValue}
-          style={{
-            outline:
-              taskDescriptionEmpty && taskDescriptionEdited
-                ? "2px solid #db2121"
-                : "",
-          }}
+          onChange={handleInputDescription}
         ></textarea>
 
-        <SubmitBtn disabled={taskTitleEmpty || taskDescriptionEmpty} />
+        <Button
+          disabled={
+            taskTitleValue.trim().length === 0 ||
+            taskDescriptionValue.trim().length === 0
+          }
+          title={"Create"}
+          type={"submit"}
+        />
       </form>
 
       {/* Cards */}
       <ul className={classes.cardsContainer}>
-        {localStorage.getItem("cardsData") &&
-          JSON.parse(localStorage.getItem("cardsData")).map((card) => (
-            <li key={card.id} className={classes.cardLi}>
+        {cardsData.map((card) => (
+          <li key={card.id} className={classes.cardLi}>
+            <Link
+              to={`/edit/${card.id}/${card.title}/${card.description}/${card.completed}`}
+            >
               <Card
                 taskName={card.title}
                 taskDescription={card.description}
                 taskDate={card.date}
               />
-            </li>
-          ))}
+            </Link>
+          </li>
+        ))}
       </ul>
     </section>
   );
