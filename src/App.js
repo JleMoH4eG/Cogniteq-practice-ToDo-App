@@ -3,6 +3,8 @@ import Home from "./pages/Home/Home";
 import EditCard from "./pages/EditCard/EditCard";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
+// /edit/:id
+// <Route path="/" element={<Home />} />
 function App() {
   return (
     <>
