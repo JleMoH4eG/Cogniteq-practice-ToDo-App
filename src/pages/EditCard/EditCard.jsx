@@ -5,7 +5,7 @@ import Button from "../../components/Button/Button";
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { editCard } from "../../store/toDoSlice";
+import { editCard, deleteCard } from "../../store/toDoSlice";
 
 function EditCard() {
   // Task's title value control
@@ -56,12 +56,24 @@ function EditCard() {
     navigateTo("/");
   };
 
+  // Delete card from local storage
+  const deleteCurrentCard = (event) => {
+    event.preventDefault();
+    dispatch(
+      deleteCard({
+        id: id,
+      })
+    );
+    navigateTo("/");
+  };
+
   return (
     <section className={classes.editCard}>
       <h1 className={classes.editCardTitle}>Edit your task</h1>
       <form
         action="#///"
         onSubmit={editCardData}
+        onReset={deleteCurrentCard}
         method="post"
         id="editCardForm"
         className={classes.editCardForm}
@@ -117,6 +129,14 @@ function EditCard() {
           }
           title={"Edit"}
           type={"submit"}
+        />
+        <Button
+          disabled={
+            taskTitleValue.trim().length === 0 ||
+            taskDescriptionValue.trim().length === 0
+          }
+          title={"Delete task"}
+          type={"reset"}
         />
       </form>
 

@@ -55,8 +55,19 @@ const toDoSlice = createSlice({
         console.error("Failed to change data");
       }
     },
+
+    deleteCard(state, action) {
+      try {
+        state.cards = state.cards.filter(
+          (item) => item.id !== action.payload.id
+        );
+        localStorage.setItem("cardsData", JSON.stringify(state.cards));
+      } catch {
+        console.error("Failed to delete data");
+      }
+    },
   },
 });
 
-export const { getData, addCard, editCard } = toDoSlice.actions;
+export const { getData, addCard, editCard, deleteCard } = toDoSlice.actions;
 export default toDoSlice.reducer;
