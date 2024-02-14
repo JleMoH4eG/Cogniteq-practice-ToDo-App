@@ -28,13 +28,15 @@ function Home() {
     return result;
   };
 
-  // Form submit functional
+  // Get data
   const [cardsData, setCardsData] = useState([]);
+
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem("cardsData")) || [];
     setCardsData(data);
   }, []);
 
+  // Form submit functional
   const saveFormData = (event) => {
     event.preventDefault();
     const newTaskObject = {
@@ -50,7 +52,7 @@ function Home() {
       setCardsData(newData);
       localStorage.setItem("cardsData", JSON.stringify(cardsData));
     } catch {
-      console.error("Failed to save data");
+      console.error("Failed to save data!");
     } finally {
       setTaskTitleValue("");
       setTaskDescriptionValue("");

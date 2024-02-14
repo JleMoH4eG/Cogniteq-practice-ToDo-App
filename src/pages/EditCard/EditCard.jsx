@@ -6,23 +6,6 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 function EditCard() {
-  const navigateTo = useNavigate();
-
-  // Get card data
-  const { id } = useParams();
-  const [cardsData, setCardsData] = useState([]);
-  useEffect(() => {
-    const data = JSON.parse(localStorage.getItem("cardsData")) || [];
-    setCardsData(data);
-    const currentData = data.find((item) => item.id === id);
-    if (!currentData) navigateTo("/");
-    else {
-      setTaskTitleValue(currentData.title);
-      setTaskDescriptionValue(currentData.description);
-      setTaskCompletedValue(currentData.completed);
-    }
-  }, [id, navigateTo]);
-
   // Task's title value control
   const [taskTitleValue, setTaskTitleValue] = useState("");
   const handleInputTitle = (event) => {
@@ -49,8 +32,23 @@ function EditCard() {
     return result;
   };
 
+  // Get card data
+  const navigateTo = useNavigate();
+  const { id } = useParams();
+  const [cardsData, setCardsData] = useState([]);
+  useEffect(() => {
+    const data = JSON.parse(localStorage.getItem("cardsData")) || [];
+    setCardsData(data);
+    const currentData = data.find((item) => item.id === id);
+    if (!currentData) navigateTo("/");
+    else {
+      setTaskTitleValue(currentData.title);
+      setTaskDescriptionValue(currentData.description);
+      setTaskCompletedValue(currentData.completed);
+    }
+  }, [id, navigateTo]);
+
   // Edit card data in local storage
-  // add catch please
   const editCardData = (event) => {
     event.preventDefault();
     try {
@@ -66,7 +64,7 @@ function EditCard() {
       data[currentCardNumber] = currentData;
       localStorage.setItem("cardsData", JSON.stringify(data));
     } catch {
-      console.error("Failed to change data");
+      console.error("Failed to change data!");
     } finally {
       navigateTo("/");
     }
