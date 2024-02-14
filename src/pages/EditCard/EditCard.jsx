@@ -50,6 +50,7 @@ function EditCard() {
   };
 
   // Edit card data in local storage
+  // add catch please
   const editCardData = (event) => {
     event.preventDefault();
     try {
