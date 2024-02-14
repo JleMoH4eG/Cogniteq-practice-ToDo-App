@@ -44,6 +44,7 @@ function Home() {
       completed: false,
       id: uuid(),
     };
+    // add please catch
     try {
       let newData = cardsData;
       newData.push(newTaskObject);
