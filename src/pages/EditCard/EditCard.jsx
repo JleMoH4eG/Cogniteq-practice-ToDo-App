@@ -4,25 +4,10 @@ import Input from "../../components/Input/Input";
 import Button from "../../components/Button/Button";
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { editCard } from "../../store/toDoSlice";
 
 function EditCard() {
-  const navigateTo = useNavigate();
-
-  // Get card data
-  const { id } = useParams();
-  const [cardsData, setCardsData] = useState([]);
-  useEffect(() => {
-    const data = JSON.parse(localStorage.getItem("cardsData")) || [];
-    setCardsData(data);
-    const currentData = data.find((item) => item.id === id);
-    if (!currentData) navigateTo("/");
-    else {
-      setTaskTitleValue(currentData.title);
-      setTaskDescriptionValue(currentData.description);
-      setTaskCompletedValue(currentData.completed);
-    }
-  }, [id, navigateTo]);
-
   // Task's title value control
   const [taskTitleValue, setTaskTitleValue] = useState("");
   const handleInputTitle = (event) => {
@@ -41,35 +26,34 @@ function EditCard() {
     setTaskCompletedValue(!taskCompletedValue);
   };
 
-  // Create a beautiful date
-  const createDate = () => {
-    const date = new Date().toString().split(" ");
-    const result = `${date[0]}, ${date[2]} ${date[1]} ${date[3]}, ${date[4]}`;
+  // Get card data and initializing form starting values
+  const navigateTo = useNavigate();
+  const { id } = useParams();
+  const cardsData = useSelector((state) => state.toDos.cards);
 
-    return result;
-  };
+  useEffect(() => {
+    const currentData = cardsData.find((item) => item.id === id);
+    if (!currentData) navigateTo("/");
+    else {
+      setTaskTitleValue(currentData.title);
+      setTaskDescriptionValue(currentData.description);
+      setTaskCompletedValue(currentData.completed);
+    }
+  }, [id, navigateTo, cardsData]);
 
   // Edit card data in local storage
-  // add catch please
+  const dispatch = useDispatch();
   const editCardData = (event) => {
     event.preventDefault();
-    try {
-      const currentCardNumber = cardsData.indexOf(
-        cardsData.find((item) => item.id === id)
-      );
-      const currentData = cardsData[currentCardNumber];
-      currentData.title = taskTitleValue;
-      currentData.description = taskDescriptionValue;
-      currentData.completed = taskCompletedValue;
-      currentData.date = createDate();
-      const data = cardsData;
-      data[currentCardNumber] = currentData;
-      localStorage.setItem("cardsData", JSON.stringify(data));
-    } catch {
-      console.error("Failed to change data");
-    } finally {
-      navigateTo("/");
-    }
+    dispatch(
+      editCard({
+        id: id,
+        newTitle: taskTitleValue,
+        newDescription: taskDescriptionValue,
+        newCompleted: taskCompletedValue,
+      })
+    );
+    navigateTo("/");
   };
 
   return (
