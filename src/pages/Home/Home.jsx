@@ -44,12 +44,13 @@ function Home() {
       completed: false,
       id: uuid(),
     };
-    // add please catch
     try {
       let newData = cardsData;
       newData.push(newTaskObject);
       setCardsData(newData);
       localStorage.setItem("cardsData", JSON.stringify(cardsData));
+    } catch {
+      console.error("Failed to save data");
     } finally {
       setTaskTitleValue("");
       setTaskDescriptionValue("");

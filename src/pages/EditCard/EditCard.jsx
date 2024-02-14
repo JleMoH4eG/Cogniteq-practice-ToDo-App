@@ -65,6 +65,8 @@ function EditCard() {
       const data = cardsData;
       data[currentCardNumber] = currentData;
       localStorage.setItem("cardsData", JSON.stringify(data));
+    } catch {
+      console.error("Failed to change data");
     } finally {
       navigateTo("/");
     }
