@@ -3,6 +3,7 @@ import Input from "../../components/Input/Input";
 import Button from "../../components/Button/Button";
 import classes from "./Home.module.scss";
 import inputClasses from "./../../components/Input/Input.module.scss";
+import uuid from "react-uuid";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,6 +22,14 @@ function Home() {
     setTaskDescriptionValue(event.target.value);
   };
 
+  // Create a beautiful date
+  const createDate = () => {
+    const date = new Date().toString().split(" ");
+    const result = `${date[0]}, ${date[2]} ${date[1]} ${date[3]}, ${date[4]}`;
+
+    return result;
+  };
+
   // Get data functional
   const cardsData = useSelector((state) => state.toDos.cards);
   const dispatch = useDispatch();
@@ -32,14 +41,20 @@ function Home() {
   //Add card functional
   const saveFormData = (event) => {
     event.preventDefault();
+    const newCard = {
+      title: taskTitleValue,
+      description: taskDescriptionValue,
+      id: uuid(),
+      date: createDate(),
+      completed: false,
+    };
     dispatch(
       addCard({
-        title: taskTitleValue,
-        description: taskDescriptionValue,
-        setTitle: setTaskTitleValue,
-        setDescription: setTaskDescriptionValue,
+        card: newCard,
       })
     );
+    setTaskTitleValue("");
+    setTaskDescriptionValue("");
   };
 
   return (

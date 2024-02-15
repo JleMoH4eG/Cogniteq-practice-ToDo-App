@@ -5,7 +5,7 @@ import Button from "../../components/Button/Button";
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { editCard, deleteCard } from "../../store/toDoSlice";
+import { editCard, deleteCard, getCardById } from "../../store/toDoSlice";
 
 function EditCard() {
   // Task's title value control
@@ -26,31 +26,42 @@ function EditCard() {
     setTaskCompletedValue(!taskCompletedValue);
   };
 
+  // Create a beautiful date
+  const createDate = () => {
+    const date = new Date().toString().split(" ");
+    const result = `${date[0]}, ${date[2]} ${date[1]} ${date[3]}, ${date[4]}`;
+
+    return result;
+  };
+
   // Get card data and initializing form starting values
   const navigateTo = useNavigate();
   const { id } = useParams();
   const cardsData = useSelector((state) => state.toDos.cards);
+  const currentCardData = useSelector((state) => state.toDos.currentCard);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const currentData = cardsData.find((item) => item.id === id);
-    if (!currentData) navigateTo("/");
+    dispatch(getCardById({ id: id }));
+    if (!currentCardData) navigateTo("/");
     else {
-      setTaskTitleValue(currentData.title);
-      setTaskDescriptionValue(currentData.description);
-      setTaskCompletedValue(currentData.completed);
+      setTaskTitleValue(currentCardData.title);
+      setTaskDescriptionValue(currentCardData.description);
+      setTaskCompletedValue(currentCardData.completed);
     }
-  }, [id, navigateTo, cardsData]);
+  }, [id, navigateTo, currentCardData, dispatch]);
 
   // Edit card data in local storage
-  const dispatch = useDispatch();
   const editCardData = (event) => {
     event.preventDefault();
+    const currentCard = { ...currentCardData };
+    currentCard.title = taskTitleValue;
+    currentCard.description = taskDescriptionValue;
+    currentCard.completed = taskCompletedValue;
+    currentCard.date = createDate();
     dispatch(
       editCard({
-        id: id,
-        newTitle: taskTitleValue,
-        newDescription: taskDescriptionValue,
-        newCompleted: taskCompletedValue,
+        card: currentCard,
       })
     );
     navigateTo("/");
@@ -59,11 +70,7 @@ function EditCard() {
   // Delete card from local storage
   const deleteCurrentCard = (event) => {
     event.preventDefault();
-    dispatch(
-      deleteCard({
-        id: id,
-      })
-    );
+    dispatch(deleteCard());
     navigateTo("/");
   };
 
